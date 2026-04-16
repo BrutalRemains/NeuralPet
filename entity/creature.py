@@ -91,3 +91,26 @@ class Creature:
         if self.energy < 0:
             self.energy = 0
         self.last_interaction = datetime.now()
+
+    def teach_trick(self):
+        if self.energy < 15:
+            self.last_interaction = datetime.now()
+            return {
+                "success": False,
+                "message": "Too tired to learn a new trick. Please rest first."
+            } 
+        # returned dict used to feed llm;success key used to determine success, message determines llm prompt
+        
+        new_trick = f"Trick {len(self.known_tricks) + 1}"
+        self.known_tricks.append(new_trick)
+        self.happiness += 10
+        if self.happiness > 100:
+            self.happiness = 100
+        self.energy -= 15
+        if self.energy < 0:
+            self.energy = 0
+        self.last_interaction = datetime.now()
+        return {
+            "success": True,
+            "message": f"Learned a new trick: {new_trick}"
+        }
