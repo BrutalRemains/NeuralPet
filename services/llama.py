@@ -1,7 +1,7 @@
 from pathlib import Path
 from llama_cpp import Llama
 
-MODEL_PATH = Path(__file__).resolve().parents[1] / "models" / "qwen2.5-1.5b-instruct-q4_k_m.gguf"
+MODEL_PATH = Path(__file__).resolve().parents[1] / "model" / "qwen2.5-1.5b-instruct-q4_k_m.gguf"
 
 llm = None
 

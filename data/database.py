@@ -73,3 +73,18 @@ def load_creature():
         }
     else:
         return None
+    
+    def row_to_creature(row):
+        return Creature(
+            name=row[0],
+            species=row[1],
+            age=row[2],
+            energy=row[3],
+            fullness=row[4],
+            happiness=row[5],
+            memory=json.loads(row[6]),
+            known_tricks=json.loads(row[7]),
+            created_at=datetime.fromisoformat(row[8]),
+            last_interaction=datetime.fromisoformat(row[9]),
+            last_decay_check=datetime.fromisoformat(row[10])
+        )
