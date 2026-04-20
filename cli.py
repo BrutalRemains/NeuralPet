@@ -1,7 +1,7 @@
-from entity.creature import Creature
-from services.llama import get_llm
-from data.database import save_creature, load_creature, row_to_creature
+from services.service_layer import create_or_load_creature, create_and_save_creature
 
+# fairly simple CLI for interacting with the creature. The llm will have some agency
+# reducing the amount of input needed from the user from a code perspective, but the user will still have a lot of freedom  
 def user_manual():
     print("Welcome to the NeuroPet user manual!")
     print("")
@@ -13,13 +13,10 @@ def user_manual():
     print("- You can ask your creature about its feelings, memories, or tricks it knows.")
     print("- You may also give your creature commands. Refer to the command section for specific commands")
     print("")  
-def chat():
-    
-    load_creature_data = load_creature()
-    
-    # llm = get_llm()
 
-    
+def chat():  
+    load_creature_data = create_or_load_creature()
+     
     if load_creature_data is None:
         print("Hello! Welcome to NeuroPet!")
         print("")
@@ -36,13 +33,12 @@ def chat():
             name = input("What would you like to name your creature? ")
             if name.strip() == "":
                 continue
-        creature = Creature(name=name, species=species)
-        save_creature(creature)
+        creature = create_and_save_creature(name, species)
         print(f"Great! You've created a {species} named {name}.")
         print("Now, let's interact with your creature! You can feed it, play with it, or just talk to it.")
 
     else:
-            creature = row_to_creature(load_creature_data)
+            creature = create_or_load_creature()
     
     running = True
     while running:
