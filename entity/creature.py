@@ -68,24 +68,6 @@ class Creature:
     def initial_prompt(self):
         return render_creature_prompt(self.prompt_context())
 
-    # def initial_prompt(self):
-    #     mood = self.calculate_mood()
-    #     prompt = f""" 
-    #     You are a {self.species}
-    #     Your name is {self.name}
-    #     You are currently {self.age} days old
-        
-    #     Current Status:
-    #     Your current mood is {mood.value}
-    #     Your current energy level is {self.energy}
-    #     Your current fullness level is {self.fullness}
-    #     Your current happiness level is {self.happiness}
-
-    #     Recent memories: {', '.join(self.memory[-3:]) if self.memory else 'none yet'}
-    #     Tricks you know: {', '.join(self.known_tricks) if self.known_tricks else 'none yet'}
-    #     """
-    #     return prompt
-
     def age_one_day(self):
         # adjust all values based on the time passed since the last decay check, this allows for real-time aging and decay of needs
         now = datetime.now()
@@ -108,17 +90,18 @@ class Creature:
         if self.fullness < 5:
             return {
                 "success": True,
-                "message": "Very hungry, beg for food."
+                "reason": "very_hungry"
             }
         elif self.fullness == 100:
             return {
                 "success": False,
-                "message": "Have a full stomach, no need to beg for food right now."
+                "reason": "full_stomach"
+
             }
         else: 
             return {
                 "success": False,
-                "message": "Not hungry enough to beg for food yet."
+                "reason": "not_hungry_enough"
             }
 
     def play(self):
@@ -138,7 +121,7 @@ class Creature:
             self.last_interaction = datetime.now()
             return {
                 "success": False,
-                "message": "Too tired to learn a new trick. Please rest first."
+                "reason": "insufficient_energy"
             } 
         # returned dict used to feed llm;success key used to determine success, message determines llm prompt
         
@@ -153,6 +136,6 @@ class Creature:
         self.last_interaction = datetime.now()
         return {
             "success": True,
-            "message": f"Learned a new trick: {new_trick}"
+            "reason": "learned_trick", "trick": new_trick
         }
 
