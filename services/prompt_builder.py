@@ -14,7 +14,7 @@ def render_creature_prompt(context):
     template = _load_template()
     return template.format_map(context)
 
-def render_action_prompt(context, intent, user_text):
+def render_action_prompt(context, intent, action_result, user_text):
     system = render_creature_prompt(context)
 
     action_file = ACTION_TEMPLATE_DIR / f"action_{intent}.txt"
@@ -22,6 +22,11 @@ def render_action_prompt(context, intent, user_text):
         action_file = ACTION_TEMPLATE_DIR / "action_chat.txt"
     
     action_template = action_file.read_text(encoding="utf-8")
-    action_section = action_template.format_map({**context, "user_text": user_text})
+    action_section = action_template.format_map({
+        **context, 
+        "user_text": user_text,
+        "success": action_result.get("success"),
+        "reason": action_result.get("reason")
+        })
 
     return f"{system}\n\n{action_section}"

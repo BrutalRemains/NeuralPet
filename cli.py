@@ -1,3 +1,4 @@
+from services.generate_reply import generate_reply
 from services.startup import create_or_load_creature, create_and_save_creature
 
 # fairly simple CLI for interacting with the creature. The llm will have some agency
@@ -13,7 +14,7 @@ def user_manual():
     print("- You can ask your creature about its feelings, memories, or tricks it knows.")
     print("- You may also give your creature commands. Refer to the command section for specific commands")
     print("")  
-
+# to keep everything modular and clean, there is almost no actual logic here
 def chat():  
     load_creature_data = create_or_load_creature()
      
@@ -44,11 +45,16 @@ def chat():
     while running:
         print("")
         print(f"{creature.name} is waiting to hang out with you!")
-        print("Please type \"c\" to continue to your creature, \"m\" to view the user manual, or \"q\" to quit.")
+        print("Please type 'c' to continue to your creature, 'm' to view the user manual, or 'q' to quit.")
         choice = input("Your choice: ").strip().lower()
         if choice == "c":
-            # Continue to interact with the creature
-            pass
+            print("You are now chatting with your creature. Type 'b' to go back to the menu.")
+            while True:
+                user_input = input("You: ")
+                if user_input.strip().lower() == "b":
+                    break
+                response = generate_reply(creature, user_input)
+                print(f"{creature.name}: {response['reply']}")
         elif choice == "m":
             user_manual()
         elif choice == "q":
