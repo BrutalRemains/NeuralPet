@@ -1,9 +1,10 @@
-from data.database import save_creature, load_creature, row_to_creature
+from data.database import initialize_db, save_creature, load_creature, row_to_creature
 from entity.creature import Creature
 # service layer for managing creature-related operations meant to scale with both complexity
 # and number of implementations such as web and cli
 
 def create_or_load_creature():
+    initialize_db()
     load_creature_data = load_creature()
     if load_creature_data is None:
         return None

@@ -3,8 +3,8 @@ from functools import lru_cache
 # simply reads from our text files and builds the prompt using the context provided
 # the prompts are used to constrain the llm to the expected behaviors
 
-TEMPLATE_PATH = Path(__file__).resolve().parents[1] / "prompts" / "creature_system_prompt.txt"
-ACTION_TEMPLATE_DIR = Path(__file__).resolve().parents[1] / "prompts" 
+TEMPLATE_PATH = Path(__file__).resolve().parents[1] / "services" / "prompts" / "creature_system_prompt.txt"
+ACTION_TEMPLATE_DIR = Path(__file__).resolve().parents[1] / "services" / "prompts" 
 
 @lru_cache(maxsize=1)
 def _load_template() -> str:

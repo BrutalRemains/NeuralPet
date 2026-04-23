@@ -14,27 +14,39 @@ class CreatureState(Enum):
 
 # the foundation of the creature itself
 class Creature:
-    def __init__(self, name, species):
+    def __init__(self, 
+                 name, 
+                 species,
+                 age=0,
+                 energy=100,
+                 fullness=100,
+                 happiness=100,
+                 memory=None,
+                 known_tricks=None,
+                 created_at=None,
+                 last_interaction=None,
+                 last_decay_check=None
+                ):
         self.name = name
         self.species = species
          
-        
-        # all needs set to a base value of 100, decreases over time
-        self.energy = 100
-        self.fullness = 100
-        self.happiness = 100
-
         # starts newborn, will age in realtime
-        self.age = 0
+        self.age = age
+
+        # all needs set to a base value of 100, decreases over time
+        # default values in the init allow the db to instantiate a creature with db values
+        self.energy = energy
+        self.fullness = fullness
+        self.happiness = happiness
         
         # lists for storing necessary information regarding the creature's experience
-        self.memory = []
-        self.known_tricks = []
+        self.memory = memory if memory is not None else []
+        self.known_tricks = known_tricks if known_tricks is not None else []
 
         # necessary for tracking the creature's state and interactions
-        self.created_at = datetime.now()
-        self.last_interaction = datetime.now()
-        self.last_decay_check = datetime.now()
+        self.created_at = created_at if created_at is not None else datetime.now()
+        self.last_interaction = last_interaction if last_interaction is not None else datetime.now()
+        self.last_decay_check = last_decay_check if last_decay_check is not None else datetime.now()
 
     def calculate_mood(self):
         if self.energy < 30:

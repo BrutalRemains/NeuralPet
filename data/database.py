@@ -1,5 +1,7 @@
 import json
 import sqlite3
+from entity.creature import Creature
+from datetime import datetime
 
 # connects to db or creates it if it doesn't exist
 def get_connection():
@@ -74,17 +76,17 @@ def load_creature():
     else:
         return None
     
-    def row_to_creature(row):
-        return Creature(
-            name=row[0],
-            species=row[1],
-            age=row[2],
-            energy=row[3],
-            fullness=row[4],
-            happiness=row[5],
-            memory=json.loads(row[6]),
-            known_tricks=json.loads(row[7]),
-            created_at=datetime.fromisoformat(row[8]),
-            last_interaction=datetime.fromisoformat(row[9]),
-            last_decay_check=datetime.fromisoformat(row[10])
-        )
+def row_to_creature(row):
+    return Creature(
+        name=row['name'],
+        species=row['species'],
+        age=row['age'],
+        energy=row['energy'],
+        fullness=row['fullness'],
+        happiness=row['happiness'],
+        memory=row['memory'],
+        known_tricks=row['known_tricks'],
+        created_at=datetime.fromisoformat(row['created_at']),
+        last_interaction=datetime.fromisoformat(row['last_interaction']),
+        last_decay_check=datetime.fromisoformat(row['last_decay_check'])
+    )
