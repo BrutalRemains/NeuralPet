@@ -6,8 +6,6 @@ from llama_cpp import Llama
 
 MODEL_PATH = Path(__file__).resolve().parents[1] / "model" / "qwen2.5-1.5b-instruct-q4_k_m.gguf"
 
-logging.getLogger("llama_cpp").setLevel(logging.ERROR) # suppress llama_cpp logging, which can be very verbose and not useful for our purposes
-
 llm = None # global variable to hold the llm instance, we will lazy load it on first use to avoid long startup times when not needed
 
 def get_llm():
