@@ -14,9 +14,16 @@ def generate_reply(creature, user_input):
     )
 
     llm = get_llm()
-    output = llm(prompt, max_tokens=120, temperature=0.7, stop=["User:", "Owner:"])
+    output = llm.create_chat_completion(
+        messages= [
+            {"role": "user", "content": prompt}
+        ], 
+        max_tokens=120, 
+        temperature=0.7, 
+        stop=["\n", "Peanut:", "Owner:", "You:"],
+        )
 
-    reply = output["choices"][0]["text"].strip()
+    reply = output["choices"][0]["message"]["content"].strip()
 
     save_creature(creature)
 
@@ -25,3 +32,20 @@ def generate_reply(creature, user_input):
         "action_result": result["action_result"],
         "reply": reply,
     }
+
+def generate_dev_reply(user_input: str, system_prompt: str | None = None) -> str:
+    # for testing and development purposes, allows direct access to the llm
+    llm = get_llm()
+
+    messages = []
+    if system_prompt:
+        messages.append({"role": "system", "content": system_prompt})
+    messages.append({"role": "user", "content": user_input})
+
+    result = llm.create_chat_completion(
+        messages=messages,
+        temperature=0.7,
+        max_tokens=120,
+    )
+
+    return result["choices"][0]["message"]["content"].strip()

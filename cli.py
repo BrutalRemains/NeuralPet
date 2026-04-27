@@ -1,4 +1,4 @@
-from services.generate_reply import generate_reply
+from services.generate_reply import generate_dev_reply, generate_reply
 from services.startup import create_or_load_creature, create_and_save_creature
 
 # fairly simple CLI for interacting with the creature. The llm will have some agency
@@ -55,6 +55,18 @@ def chat():
                     break
                 response = generate_reply(creature, user_input)
                 print(f"{creature.name}: {response['reply']}")
+        elif choice == "dev mode":
+            # for testing and development purposes, allows direct access to the llm
+            print("Entering dev mode. Type 'b' to go back to the menu.")
+            while True:
+                user_input = input("You: ")
+                if user_input.strip().lower() == "b":
+                    break
+                system_prompt = input("System prompt (optional): ")
+                if system_prompt.strip() == "":
+                    system_prompt = None
+                response = generate_dev_reply(user_input, system_prompt)
+                print(f"LLM Response: {response}")
         elif choice == "m":
             user_manual()
         elif choice == "q":
