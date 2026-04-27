@@ -7,10 +7,10 @@ def parse_command(text: str):
 
 # we first check for intent ourselves using simple keyword matching, faster than llm
 
-def local_intent_parse(text: str):
+def local_intent_parse(text):
     t = text.lower().strip()
 
-    if any(p in t for p in ["feed", "give food", "hungry", "eat"]):
+    if any(p in t for p in ["feed", "give food", "eat"]):
         return {"intent": "feed", "confidence": 0.9}
     if any(p in t for p in ["play", "fetch", "game"]):
         return {"intent": "play", "confidence": 0.85}
@@ -23,7 +23,7 @@ def local_intent_parse(text: str):
 
     return {"intent": "chat", "confidence": 0.0}
 
-def run_action(creature, intent: str):
+def run_action(creature, intent):
     if intent == "feed":
         return creature.feed()
     if intent == "play":
@@ -36,7 +36,7 @@ def run_action(creature, intent: str):
         return {"success": True, "reason": "status_only"}
     return {"success": True, "reason": "chat_only"}
 
-def apply_user_input(creature, user_input: str) -> dict:
+def apply_user_input(creature, user_input):
     text = user_input.strip()
     if not text:
         return {"intent": "chat", "action_result": {"success": False, "reason": "empty_input"}}

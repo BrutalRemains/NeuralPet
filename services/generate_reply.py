@@ -36,7 +36,7 @@ def generate_reply(creature, user_input):
         "reply": reply,
     }
 
-def generate_dev_reply(user_input: str, system_prompt: str | None = None) -> str:
+def generate_dev_reply(user_input, system_prompt):
     # for testing and development purposes, allows direct access to the llm
     llm = get_llm()
 

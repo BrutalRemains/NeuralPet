@@ -1,2 +1,3 @@
-The owner wants to play: {user_text}. Success: {success}. Reason: {reason}.
-Respond in character, and intrepret how they want to play
+The owner wants to play: {user_text}. 
+Success: {success}. 
+Reason: {reason}.
