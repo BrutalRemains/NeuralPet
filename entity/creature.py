@@ -159,3 +159,41 @@ class Creature:
             "reason": "learned_trick", "trick": new_trick
         }
 
+    def perform_trick(self, trick):
+        if not self.known_tricks:
+            return {
+                "success": False,
+                "reason": "no_tricks_learned"
+            }
+        if trick not in self.known_tricks:
+            return {
+                "success": False,
+                "reason": "trick_not_known"
+            }
+        self.happiness += 5
+        if self.happiness > 100:
+            self.happiness = 100
+        self.energy -= 5
+        if self.energy < 5:
+            return {
+                "success": False,
+                "reason": "insufficient_energy"
+            }
+        
+        return {
+            "success": True,
+            "reason": "trick_performed"
+        } 
+
+    def rest(self):
+        self.energy += 30
+        if self.energy > 100:
+            self.energy = 100
+        self.fullness -= 10
+        if self.fullness < 0:
+            self.fullness = 0
+        self.last_interaction = datetime.now()
+        return {
+            "success": True,
+            "reason": "rested"
+        }

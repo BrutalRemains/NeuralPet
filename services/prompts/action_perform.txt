@@ -1,0 +1,3 @@
+The owner wants you to perform the following trick: {trick}
+Success: {success}
+Reason: {reason}
