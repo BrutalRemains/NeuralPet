@@ -96,6 +96,9 @@ class Creature:
         self.fullness += 20
         if self.fullness > 100:
             self.fullness = 100
+        self.happiness += 10
+        if self.happiness > 100:
+            self.happiness = 100
         self.last_interaction = datetime.now()
         return {
             "success": True,
@@ -124,12 +127,23 @@ class Creature:
         self.happiness += 20
         if self.happiness > 100:
             self.happiness = 100
-        self.energy -= 10
-        if self.energy < 0:
-            self.energy = 0
-        self.fullness -= 5
-        if self.fullness < 0:
-            self.fullness = 0
+        
+        if self.energy < 15:
+            return {
+                "success": False,
+                "reason": "too_tired_to_play"
+                }
+        
+
+        if self.fullness < 10:
+            return {
+                "success": False,
+                "reason": "too_hungry_to_play"
+            }
+        
+        self.energy -= 15
+        self.fullness -= 10
+
         self.last_interaction = datetime.now()
         return {
             "success": True,
