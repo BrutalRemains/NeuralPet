@@ -54,6 +54,8 @@ def chat():
                 if user_input.strip().lower() == "b":
                     break
                 response = generate_reply(creature, user_input)
+                if response["action_result"]["reason"] == "learned_trick":
+                    print(f"[{creature.name} learned: {response['action_result'].get('trick')}]")
                 print(f"{creature.name}: {response['reply']}")
         elif choice == "dev mode":
             # for testing and development purposes, allows direct access to the llm

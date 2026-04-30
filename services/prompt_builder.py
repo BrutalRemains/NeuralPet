@@ -26,7 +26,7 @@ def render_action_prompt(context, intent, action_result, user_text):
         "user_text": user_text,
         "success": action_result.get("success"),
         "reason": action_result.get("reason"),
-        "user_text": user_text,
+        "trick": action_result.get("trick"),
         })
 
     return action

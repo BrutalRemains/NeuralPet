@@ -136,7 +136,7 @@ class Creature:
             "reason": "played" 
         }
 
-    def teach_trick(self):
+    def teach_trick(self, trick_name):
         if self.energy < 15:
             self.last_interaction = datetime.now()
             return {
@@ -145,8 +145,11 @@ class Creature:
             } 
         # returned dict used to feed llm;success key used to determine success, message determines llm prompt
         
-        new_trick = f"Trick {len(self.known_tricks) + 1}"
-        self.known_tricks.append(new_trick)
+        name = trick_name or f"Trick {len(self.known_tricks) + 1}"
+
+        if name.lower() in [t.lower() for t in self.known_tricks]:
+            return {"success": False, "reason": "already_knows_trick", "trick": name}
+        self.known_tricks.append(name)
         self.happiness += 10
         if self.happiness > 100:
             self.happiness = 100
@@ -156,7 +159,8 @@ class Creature:
         self.last_interaction = datetime.now()
         return {
             "success": True,
-            "reason": "learned_trick", "trick": new_trick
+            "reason": "learned_trick", 
+            "trick": name
         }
 
     def perform_trick(self, trick):

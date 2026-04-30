@@ -1,12 +1,43 @@
+import json
+from pathlib import Path
+
 INTENT_THRESHOLD = 0.7
 
-def parse_command(text: str):
-    if not text.startswith("/"):
-        return None
-    return text[1:].split(" ", 1)[0].strip().lower()
+TRICKS_PATH = Path(__file__).resolve().parents[1] / "data" / "tricks.json"
+
+def load_trick_names():
+    return json.loads(TRICKS_PATH.read_text(encoding="utf-8"))
+
+# extract trick name for the purpose of performing
+def extract_trick_name(text, known_tricks):
+    t = text.lower()
+    for trick in known_tricks:
+        if trick.lower() in t:
+            return trick
+    return known_tricks[0] if known_tricks else None
+
+# extract trick name for the purpose of teaching
+def extract_trick_from_teach_input(text):
+    t = text.lower().strip()
+    predefined_tricks = load_trick_names()
+
+    # if it matches a predefined trick
+    for trick in predefined_tricks:
+        if trick.lower() in t:
+            return trick.title()
+    
+    teach_keywords = ["teach you to", "teach you", "learn to", "train you to", "train you", "teach"]      
+    for kw in teach_keywords:
+        if kw in t:
+            after = t.split(kw,1)[-1].strip()
+            # strip filler to find the word for the trick. inelegant but for now it's best option
+            for filler in ["please", "!", "?", "."]:
+                after = after.replace(filler, " ").strip()
+            if after:
+                return after.title()
+    return None
 
 # we first check for intent ourselves using simple keyword matching, faster than llm
-
 def local_intent_parse(text, known_tricks):
     t = text.lower().strip()
 
@@ -27,12 +58,10 @@ def local_intent_parse(text, known_tricks):
 
     return {"intent": "chat", "confidence": 0.0}
 
-def extract_trick_name(text, known_tricks):
-    t = text.lower()
-    for trick in known_tricks:
-        if trick.lower() in t:
-            return trick
-    return known_tricks[0] if known_tricks else None
+def parse_command(text):
+    if not text.startswith("/"):
+        return None
+    return text[1:].split(" ", 1)[0].strip().lower()
 
 def run_action(creature, intent, text):
     if intent == "feed":
@@ -42,9 +71,10 @@ def run_action(creature, intent, text):
     if intent == "rest":
         return creature.rest()
     if intent == "teach":
-        return creature.teach_trick()
+        trick = extract_trick_from_teach_input(text)
+        return creature.teach_trick(trick)
     if intent == "perform":
-        trick = extract_trick_name(text)
+        trick = extract_trick_name(text, creature.known_tricks)
         return creature.perform_trick(trick)
     if intent == "status":
         return {"success": True, "reason": "status_only"}

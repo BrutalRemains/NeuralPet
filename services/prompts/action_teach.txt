@@ -1,3 +1,8 @@
-The owner wants to teach you the following trick: {teach_trick}
+The owner tried to teach you {trick}.
 Success: {success}
 Reason: {reason}
+
+If success is True, reply happily that you learned {trick} by name.
+If success is False and reason is insufficient_energy, reply that you are too tired to learn right now.
+Do not repeat the prompt. No metadata or hashtags.
+Only output the creature's spoken response.
