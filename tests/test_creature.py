@@ -100,3 +100,54 @@ class TestCreatureMethods(unittest.TestCase): # most methods use basic addition 
         self.assertEqual(creature.energy, 80)
         self.assertEqual(creature.fullness, 80)
         self.assertEqual(creature.happiness, 100) # no change
+
+    # teach trick
+    def test_teach_trick_add_to_known_tricks(self):
+        creature = TestCreatureMethods.make_creature(known_tricks=["sit"])
+        result = creature.teach_trick("roll over")
+        self.assertTrue(result["success"])
+        self.assertIn("roll over", creature.known_tricks)
+    
+    def test_teach_trick_already_known(self):
+        creature = TestCreatureMethods.make_creature(known_tricks=["sit"])
+        result = creature.teach_trick("sit")
+        self.assertFalse(result["success"])
+        self.assertIn("sit", creature.known_tricks)
+    
+    def test_teach_trick_values(self):
+        creature = TestCreatureMethods.make_creature(energy=50, happiness=90)
+        result = creature.teach_trick("roll over")
+        self.assertTrue(result["success"])
+        self.assertEqual(creature.energy, 35)
+        self.assertEqual(creature.happiness, 100)
+    
+    def test_teach_trick_insufficient_energy(self):
+        creature = TestCreatureMethods.make_creature(energy=10)
+        result = creature.teach_trick("roll over")
+        self.assertFalse(result["success"])
+        self.assertEqual(result["reason"], "insufficient_energy")
+        self.assertEqual(creature.energy, 10)  # no change
+
+    # perform trick
+    def test_perform_trick_success(self):
+        creature = TestCreatureMethods.make_creature(known_tricks=["sit"], energy=50, happiness=90)
+        result = creature.perform_trick("sit")
+        self.assertTrue(result["success"])
+        self.assertEqual(creature.happiness, 95)
+        self.assertEqual(creature.energy, 45)
+    
+    def test_perform_trick_not_known(self):
+        creature = TestCreatureMethods.make_creature(known_tricks=["sit"], energy=50, happiness=90)
+        result = creature.perform_trick("roll over")
+        self.assertFalse(result["success"])
+        self.assertEqual(result["reason"], "trick_not_known")
+        self.assertEqual(creature.happiness, 90)  # no change
+        self.assertEqual(creature.energy, 50)  # no change
+    
+    def test_perform_trick_insufficient_energy(self):
+        creature = TestCreatureMethods.make_creature(known_tricks=["sit"], energy=3, happiness=90)
+        result = creature.perform_trick("sit")
+        self.assertFalse(result["success"])
+        self.assertEqual(result["reason"], "insufficient_energy")
+        self.assertEqual(creature.happiness, 90) # no change
+        self.assertEqual(creature.energy, 3)  # no change

@@ -183,20 +183,20 @@ class Creature:
                 "success": False,
                 "reason": "no_tricks_learned"
             }
-        if trick not in self.known_tricks:
+        elif trick not in self.known_tricks:
             return {
                 "success": False,
                 "reason": "trick_not_known"
             }
-        self.happiness += 5
-        if self.happiness > 100:
-            self.happiness = 100
-        self.energy -= 5
-        if self.energy < 5:
+        elif self.energy < 5:
             return {
                 "success": False,
                 "reason": "insufficient_energy"
             }
+        self.energy -= 5
+        self.happiness += 5
+        if self.happiness > 100:
+            self.happiness = 100
         
         return {
             "success": True,
