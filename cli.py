@@ -45,7 +45,7 @@ def chat():
     while running:
         print("")
         print(f"{creature.name} is waiting to hang out with you!")
-        print("Please type 'c' to continue to your creature, 'm' to view the user manual, or 'q' to quit.")
+        print("Please type 'c' to continue to your creature, 'm' to view the user manual, or 'q' to quit.\nType delete to delete your creature and start over.")
         choice = input("Your choice: ").strip().lower()
         if choice == "c":
             print("You are now chatting with your creature. Type 'b' to go back to the menu.")
@@ -69,6 +69,13 @@ def chat():
                     system_prompt = None
                 response = generate_dev_reply(user_input, system_prompt)
                 print(f"LLM Response: {response}")
+        elif choice == "delete":
+            confirm = input("Are you sure you want to delete your creature and start over? (y/n): ").strip().lower()
+            if confirm == "y":
+                # placeholder
+                print("Creature deleted. Returning to main menu.")
+            else:                
+                print("Deletion cancelled. Returning to main menu.")
         elif choice == "m":
             user_manual()
         elif choice == "q":

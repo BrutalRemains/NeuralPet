@@ -1,4 +1,4 @@
-from data.database import initialize_db, save_creature, load_creature, row_to_creature
+from data.database import initialize_db, save_creature, load_creature, row_to_creature 
 from entity.creature import Creature
 # service layer for managing creature-related operations meant to scale with both complexity
 # and number of implementations such as web and cli
