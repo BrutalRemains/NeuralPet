@@ -1,5 +1,6 @@
 import json
 import sqlite3
+import os
 from entity.creature import Creature
 from datetime import datetime
 
@@ -54,28 +55,37 @@ def save_creature(creature):
     conn.close()
 
 def load_creature():
-    conn = get_connection()
-    cursor = conn.cursor()
-    cursor.execute('SELECT name, species, age, energy, fullness, happiness, memory_json, known_tricks_json, created_at, last_interaction, last_decay_check FROM creature WHERE id = 1')
-    row = cursor.fetchone()
-    conn.close()
-    if row:
-        return {
-            'name': row[0],
-            'species': row[1],
-            'age': row[2],
-            'energy': row[3],
-            'fullness': row[4],
-            'happiness': row[5],
-            'memory': json.loads(row[6]),
-            'known_tricks': json.loads(row[7]),
-            'created_at': row[8],
-            'last_interaction': row[9],
-            'last_decay_check': row[10]
-        }
-    else:
-        return None
+    try:
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute('SELECT name, species, age, energy, fullness, happiness, memory_json, known_tricks_json, created_at, last_interaction, last_decay_check FROM creature WHERE id = 1')
+        row = cursor.fetchone()
+        conn.close()
+        if row:
+            return {
+                'name': row[0],
+                'species': row[1],
+                'age': row[2],
+                'energy': row[3],
+                'fullness': row[4],
+                'happiness': row[5],
+                'memory': json.loads(row[6]),
+                'known_tricks': json.loads(row[7]),
+                'created_at': row[8],
+                'last_interaction': row[9],
+                'last_decay_check': row[10]
+            }
+        else:
+            return None
+    except sqlite3.DatabaseError as e:
+        handle_corrupted_db()
+        raise RuntimeError("Database was corrupted and has been reset. Please restart the application to create a new creature.") from e
     
+def handle_corrupted_db():
+    os.remove('./data/creature.db')
+    initialize_db()
+
+
 def row_to_creature(row):
     return Creature(
         name=row['name'],

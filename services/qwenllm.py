@@ -10,14 +10,18 @@ llm = None # global variable to hold the llm instance, we will lazy load it on f
 
 def get_llm():
     global llm
-    if llm is None:
-        if not MODEL_PATH.exists():
-            raise FileNotFoundError(f"Model file not found at {MODEL_PATH}.")
-        llm = Llama(
-            model_path=str(MODEL_PATH),
-            n_ctx=2048,
-            n_threads=4,
-            verbose=False,
-        )
+    try:
+        if llm is None:
+            if not MODEL_PATH.exists():
+                raise FileNotFoundError(f"Model file not found at {MODEL_PATH}.")
+            llm = Llama(
+                model_path=str(MODEL_PATH),
+                n_ctx=2048,
+                n_threads=4,
+                verbose=False,
+            )
+    except Exception as e:
+        logging.error(f"Error loading LLM model: {e}")
+        raise e
     return llm
         
