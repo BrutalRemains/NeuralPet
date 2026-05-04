@@ -1,5 +1,7 @@
+from data import database
 from services.generate_reply import generate_dev_reply, generate_reply
 from services.startup import create_or_load_creature, create_and_save_creature
+from data.database import delete_creature
 
 # fairly simple CLI for interacting with the creature. The llm will have some agency
 # reducing the amount of input needed from the user from a code perspective, but the user will still have a lot of freedom  
@@ -72,8 +74,9 @@ def chat():
         elif choice == "delete":
             confirm = input("Are you sure you want to delete your creature and start over? (y/n): ").strip().lower()
             if confirm == "y":
-                # placeholder
-                print("Creature deleted. Returning to main menu.")
+                database.delete_creature()
+                print("Creature deleted. Launch to create a new one.")
+                running = False
             else:                
                 print("Deletion cancelled. Returning to main menu.")
         elif choice == "m":

@@ -215,3 +215,14 @@ class Creature:
             "success": True,
             "reason": "rested"
         }
+
+    def status(self):
+        return {
+            "success": True,
+            "reason": "status_only",
+            "energy": self.energy,
+            "fullness": self.fullness,
+            "happiness": self.happiness,
+            "age": self.age,
+            "known_tricks": self.known_tricks
+        }

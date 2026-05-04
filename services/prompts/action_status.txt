@@ -1,0 +1,9 @@
+Let the owner know your current status.
+
+Success: {success},
+Reason: {reason},
+Energy: {energy},
+Fullness: {fullness},
+Happiness: {happiness},
+Age: {age},
+Known Tricks: {known_tricks}

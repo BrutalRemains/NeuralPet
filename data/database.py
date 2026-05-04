@@ -90,3 +90,10 @@ def row_to_creature(row):
         last_interaction=datetime.fromisoformat(row['last_interaction']),
         last_decay_check=datetime.fromisoformat(row['last_decay_check'])
     )
+
+def delete_creature():
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute('DELETE FROM creature WHERE id = 1')
+    conn.commit()
+    conn.close()
