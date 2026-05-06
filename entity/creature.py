@@ -91,6 +91,16 @@ class Creature:
             self.fullness = max(0, self.fullness - (5 * days_passed))
             self.happiness = max(0, self.happiness - (2 * days_passed))
             self.last_decay_check += timedelta(days=days_passed)
+    
+    def apply_decay(self, now=None):
+        now = now or datetime.now()
+        days_passed = (now - self.last_decay_check).days
+        if days_passed >= 1:
+            self.age += days_passed
+            self.energy = max(0, self.energy - (5 * days_passed))
+            self.fullness = max(0, self.fullness - (5 * days_passed))
+            self.happiness = max(0, self.happiness - (2 * days_passed))
+            self.last_decay_check += timedelta(days=days_passed)
 
     def feed(self):
         self.fullness += 20
@@ -226,3 +236,5 @@ class Creature:
             "age": self.age,
             "known_tricks": self.known_tricks
         }
+    
+    

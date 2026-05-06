@@ -85,7 +85,6 @@ def handle_corrupted_db():
     os.remove('./data/creature.db')
     initialize_db()
 
-
 def row_to_creature(row):
     return Creature(
         name=row['name'],

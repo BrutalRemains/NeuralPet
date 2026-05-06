@@ -63,6 +63,30 @@ def parse_command(text):
         return None
     return text[1:].split(" ", 1)[0].strip().lower()
 
+def llm_intent_parse(text, known_tricks): # for allowing the llm to determine user intent. the primary reason to use an llm in the first place
+    tricks_str = ", ".join(known_tricks)
+    prompt = f"""You are classifying the intent of a user's message to their virtual pet. The
+Known tricks the pet knows: {tricks_str}          
+Respond ONLY with valid JSON, no explanation:
+{{"intent": "feed|play|rest|teach|perform|chat", "confidence": 0.0, "trick": "trick name or null"}}
+
+Message: "{text}"
+"""
+    try:
+        out = llm.create_chat_completion(
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=40,
+            temperature=0.0,
+        )
+        raw = out["choices"][0]["message"]["content"].strip()
+        data = json.loads(raw)
+        return {
+            "intent": data.get("intent", "chat"),
+            "confidence": float(data.get("confidence", 0.0)),
+            "trick": data.get("trick"),
+        }
+    except Exception:
+        return {"intent": "chat", "confidence": 0.0, "trick": None}
 def run_action(creature, intent, text):
     if intent == "feed":
         return creature.feed()
@@ -98,6 +122,9 @@ def apply_user_input(creature, user_input):
         action_result = run_action(creature, intent, text)
         return {"intent": intent, "action_result": action_result, "user_text_for_llm": text}
 
+    llm_intent = llm_intent_parse(text, creature.known_tricks)
+    
+    
     return {
         "intent": "chat",
         "action_result": {"success": True, "reason": "chat_only"},
