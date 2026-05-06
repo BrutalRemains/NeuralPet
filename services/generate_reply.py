@@ -31,6 +31,7 @@ def generate_reply(creature, user_input):
     save_creature(creature)
 
     print(f"[DEBUG] action_result in generate_reply: {result['action_result']}")
+    print(f"[DEBUG] trick in action_result: {result['action_result'].get('trick')}")
     return {
         "intent": result["intent"],
         "action_result": result["action_result"],

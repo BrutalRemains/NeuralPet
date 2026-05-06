@@ -210,7 +210,8 @@ class Creature:
         
         return {
             "success": True,
-            "reason": "trick_performed"
+            "reason": "trick_performed",
+            "trick": trick
         } 
 
     def rest(self):

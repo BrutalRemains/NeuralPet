@@ -1,4 +1,6 @@
-Determine what the owner wants based on their input.
+The owner said: "{user_text}"
+
+Respond directly to what the owner said.
 
 Success: {success}
 Reason: {reason}
